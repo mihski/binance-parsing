@@ -79,6 +79,7 @@ def setup_driver(headless: bool = False):
     if headless:
         options.add_argument("--headless=new")
 
-    service = Service(ChromeDriverManager().install())
+    service = Service(ChromeDriverManager(driver_version=chrome_version).install())
     drivercrome = webdriver.Chrome(service=service, options=options)
+    print(F"✅ WebDriver версии {chrome_version} успешно создан.")
     return drivercrome
