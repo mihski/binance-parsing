@@ -57,16 +57,49 @@ def fetch_current_data(driver, url):
 
         # Обязательно переименуйте столбцы в соответствии с вашей таблицей
         # ИНАЧЕ Pandas не сможет корректно сравнить их в check_for_changes
-        current_df.columns = ['tier'
-                              'Weekly Maker Volume Percentage Requirement',
-                              'And/Or',
-                              'Weekly Maker Volume (USD equivalent)',
-                              'Maker Fee (Rebate)',
-                              'Taker Fees']
+        # current_df.columns = ['tier'
+        #                       'Weekly Maker Volume Percentage Requirement',
+        #                       'And/Or',
+        #                       'Weekly Maker Volume (USD equivalent)',
+        #                       'Maker Fee (Rebate)',
+        #                       'Taker Fees']
 
+        print("Обнаруженные столбцы (по умолчанию):", current_df.columns.tolist())
         return current_df  # Возвращаем DataFrame с текущими данными
 
     except Exception as e:
         print(f"❌ Ошибка при получении/парсинге данных: {e}")
         return pd.DataFrame()  # Возвращаем пустой DataFrame в случае ошибки
-    
+
+
+def save_data(df, file_path):
+    """Сохраняет текущий DataFrame для следующего цикла."""
+    df.to_json(file_path, orient='records', indent=4)  # Сохраняем DataFrame в JSON-файл
+
+
+# --- ВРЕМЕННЫЙ БЛОК ДЛЯ ПРОВЕРКИ ---
+if __name__ == "__main__":
+
+    # 1. Запуск драйвера
+    driver = setup_driver()
+
+    # 2. Получение данных
+    print("Получение данных для первой проверки...")
+    data_to_check = fetch_current_data(driver, url)
+
+    # 3. Закрытие драйвера
+    driver.quit()
+
+    # 4. Проверка и сохранение
+    if not data_to_check.empty:
+        # Убедитесь, что у вас есть столбец 'Asset' перед сохранением!
+        if 'tier' in data_to_check.columns:
+            # Сохраняем файл для просмотра
+            save_data(data_to_check, "initial_scrape_data.json")
+            print("✅ Данные успешно спарсены и сохранены в initial_scrape_data.json")
+            print("\nПервые 5 строк данных:")
+            print(data_to_check.head())
+        else:
+            print("❌ Ошибка: Не удалось найти или назвать столбец 'tier'. Проверьте код парсинга.")
+    else:
+        print("❌ Не удалось получить данные. Проверьте URL и селектор TABLE_SELECTOR.")

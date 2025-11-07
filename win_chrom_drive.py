@@ -51,9 +51,9 @@ def setup_driver(headless: bool = False):
     driver = webdriver.Chrome(service=service, options=options)
     return driver
 
-# if __name__ == "__main__":
-#     driver = setup_driver(headless=False)
-    
-#     driver.get("https://www.google.com")
-#     print("🌍 Страница:", driver.title)
-#     driver.quit()
+if __name__ == "__main__":
+    driver = setup_driver(headless=False)
+
+    driver.get("https://www.google.com")
+    print("🌍 Страница:", driver.title)
+    driver.quit()
