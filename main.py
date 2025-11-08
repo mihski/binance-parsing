@@ -1,105 +1,144 @@
 """
-начинаю парсить
+создание начального файла
 """
-
+import os
 import time
+from io import StringIO
 from chrome_driver import setup_driver
 from selenium.webdriver.support.ui import WebDriverWait # класс для  явных ожиданий
 from selenium.webdriver.support import expected_conditions as EC # класс стандартных
 from selenium.webdriver.common.by import By # класс By для поиска элементов по разным стратегиям (CSS, ID, XPATH)
 import pandas as pd  # библиотека Pandas для работы с табличными данными
-from bs4 import BeautifulSoup
 
 url=f"https://www.binance.com/en/fee/spotMaker"
-PREV_DATA_FILE = 'previous_data.json'  # Имя файла для данных предыдущего запроса
-TABLE_SELECTOR = (By.TAG_NAME, 'table')  # Стратегия поиска: ищем элемент по тегу <table>
-                                         # (By.ID, By.CLASS_NAME)
-
-# def main():
-#     """
-#     открытие страницы
-#     """
-#     driver = setup_driver(headless=True)
-#     driver.get(url)
-#     time.sleep(10)
-#     print("Открыта страница:", driver.title)
-#     driver.quit()
-
-
+SAVE_DATA_FILE = 'save_data.json'  # Имя файла для данных предыдущего запроса
+TARGET_TABLE_XPATH = "//table[contains(., 'Weekly Maker Volume Percentage Requirement')]"
+TARGET_LOCATOR = (By.XPATH, TARGET_TABLE_XPATH)
+TAIMEOUT=10
+driver=setup_driver
 def fetch_current_data(driver, url):
-    """Использует Selenium для загрузки, ожидания, и BeautifulSoup для парсинга."""
+
     try:
-        driver.get(url)  # Загружаем указанный URL
+        driver.get(url)
         print("Ожидание загрузки динамического контента...")
 
         #  ожидание (Selenium):  пока элемент таблицы станет доступен
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located(TABLE_SELECTOR)
+        WebDriverWait(driver, TAIMEOUT).until(
+            EC.presence_of_element_located(TARGET_LOCATOR)
         )
 
-        # 2. Получение HTML (Selenium): Получаем весь HTML-код страницы после ее полной загрузки
-        html_content = driver.page_source
+        table_element = driver.find_element(*TARGET_LOCATOR)
 
-        #  Создаем объект BeautifulSoup для разбора HTML
-        soup = BeautifulSoup(html_content, 'html.parser')
+        html_content = table_element.get_attribute('outerHTML')
+        # Чтение данных (Pandas с StringIO)
+        dfs = pd.read_html(StringIO(html_content))
+        current_df = dfs[0]
+        print(f"количество столбцов найдено{len(current_df.columns)}")
 
-        # Находим нужную таблицу с помощью BeautifulSoup (используя тот же селектор)
-        table = soup.find(TABLE_SELECTOR[1]) # В TABLE_SELECTOR[1] находится 'table'
+        # 3. Обработка столбцов
 
-        if not table:
-            print("Таблица не найдена на странице.")
-            return pd.DataFrame() # Возвращаем пустой DataFrame
+        new_columns = [
+            'Tier',
+            'Weekly_Per_Req',
+            'And/or',
+            'Weekly_USD equivalent',
+            'Maker_Fees',
+            'Taker_Fees'
+        ]
+        if len(current_df.columns) == len(new_columns):
+            current_df.columns = new_columns
 
-        # 4. Чтение данных (Pandas): Используем Pandas для прямого чтения HTML-таблицы
-        # Передаем Pandas только HTML-код *конкретной* таблицы, а не всей страницы
-        dfs = pd.read_html(str(table))
-        current_df = dfs[0]  # pd.read_html всегда возвращает список, берем первый элемент
-
-        # Обязательно переименуйте столбцы в соответствии с вашей таблицей
-        # ИНАЧЕ Pandas не сможет корректно сравнить их в check_for_changes
-        # current_df.columns = ['tier'
-        #                       'Weekly Maker Volume Percentage Requirement',
-        #                       'And/Or',
-        #                       'Weekly Maker Volume (USD equivalent)',
-        #                       'Maker Fee (Rebate)',
-        #                       'Taker Fees']
-
-        print("Обнаруженные столбцы (по умолчанию):", current_df.columns.tolist())
-        return current_df  # Возвращаем DataFrame с текущими данными
+            print("✅ DataFrame успешно создан (6 столбцов найдено и переименовано).")
+        else:
+        # Этот блок сработает, если Pandas найдет 5, 7 или 8 столбцов
+            print(f"⚠️ ВНИМАНИЕ: Ожидалось 6 столбцов, но Pandas нашел {len(current_df.columns)}. Проверьте структуру.")
 
     except Exception as e:
-        print(f"❌ Ошибка при получении/парсинге данных: {e}")
-        return pd.DataFrame()  # Возвращаем пустой DataFrame в случае ошибки
+         print(f"❌ Ошибка при получении/парсинге данных: {e}")
+    return current_df
 
+def save_data():
+    if not current_data_df.empty:
+        print("\n--- Результат парсинга ---")
+        print(current_data_df)
+        print("--------------------------")
+        current_data_df.to_json(
+            SAVE_DATA_FILE, 
+            orient='records', 
+            indent=4
+        )    
 
-def save_data(df, file_path):
-    """Сохраняет текущий DataFrame для следующего цикла."""
-    df.to_json(file_path, orient='records', indent=4)  # Сохраняем DataFrame в JSON-файл
+def compare_data(current_df, prev_data_file):
+    """
+    Загружает предыдущие данные из JSON и сравнивает их с текущим DataFrame.
+    """
+    if not os.path.exists(prev_data_file):
+        print("📁 Первый запуск. Файл предыдущих данных не найден.")
+        return True, "INITIAL_RUN" # Возвращаем True, чтобы сохранить текущие данные
 
+    try:
+        # Загрузка предыдущих данных из JSON (используем те же параметры, что и для сохранения)
+        prev_df = pd.read_json(prev_data_file, orient='records')
 
-# --- ВРЕМЕННЫЙ БЛОК ДЛЯ ПРОВЕРКИ ---
-if __name__ == "__main__":
+        # Убедимся, что оба DataFrame имеют одинаковый порядок строк/столбцов перед сравнением
+        prev_df = prev_df.sort_index(axis=1)
+        current_df = current_df.sort_index(axis=1)
 
-    # 1. Запуск драйвера
-    driver = setup_driver()
-
-    # 2. Получение данных
-    print("Получение данных для первой проверки...")
-    data_to_check = fetch_current_data(driver, url)
-
-    # 3. Закрытие драйвера
-    driver.quit()
-
-    # 4. Проверка и сохранение
-    if not data_to_check.empty:
-        # Убедитесь, что у вас есть столбец 'Asset' перед сохранением!
-        if 'tier' in data_to_check.columns:
-            # Сохраняем файл для просмотра
-            save_data(data_to_check, "initial_scrape_data.json")
-            print("✅ Данные успешно спарсены и сохранены в initial_scrape_data.json")
-            print("\nПервые 5 строк данных:")
-            print(data_to_check.head())
+        # Сравнение: Pandas .equals() сравнивает каждый элемент
+        if current_df.equals(prev_df):
+            print("✅ Данные не изменились. Таблица 'Liquidity Program' стабильна.")
+            return False, "NO_CHANGE"
         else:
-            print("❌ Ошибка: Не удалось найти или назвать столбец 'tier'. Проверьте код парсинга.")
-    else:
-        print("❌ Не удалось получить данные. Проверьте URL и селектор TABLE_SELECTOR.")
+            print("🚨 ВНИМАНИЕ: Обнаружены изменения в таблице!")
+            
+            # Дополнительный вывод для отладки: показываем, что изменилось
+            # .merge() позволяет найти различия между двумя DF
+            comparison_df = current_df.merge(
+                prev_df, 
+                indicator=True, 
+                how='outer'
+            ).query('_merge != "both"')
+            
+            print("\n--- Отличия (новые или удаленные строки) ---")
+            print(comparison_df)
+            print("---------------------------------------------")           
+            return True, "CHANGED"
+
+    except Exception as e:
+        print(f"❌ Ошибка при сравнении данных или чтении файла: {type(e).__name__} - {e}")
+        return True, "ERROR_OCCURRED" # В случае ошибки (например, поврежден JSON), сохраняем новые данные
+
+if __name__ == "__main__":
+    # Убедитесь, что PREV_DATA_FILE определен в глобальной области
+    # PREV_DATA_FILE = 'previous_data.json'
+    
+    driver = None
+    try:
+        driver = setup_driver()
+        current_data_df = fetch_current_data(driver, url)
+
+        if current_data_df is None or current_data_df.empty:
+            print("Пропуск сравнения: не удалось получить текущие данные.")
+        else:
+            # 1. Сравнение с предыдущими данными
+            should_save, status = compare_data(current_data_df, SAVE_DATA_FILE)
+
+            # 2. Условное сохранение
+            if should_save:
+                current_data_df.to_json(
+                    SAVE_DATA_FILE, 
+                    orient='records', 
+                    indent=4
+                )
+                print(f"\n💾 Новые данные сохранены в {SAVE_DATA_FILE} (Статус: {status}).")
+
+    finally:
+        if driver:
+            driver.quit()
+
+
+
+
+
+
+  

@@ -59,7 +59,7 @@ def get_chrome_version() -> str:
     return None
 
 
-def setup_driver(headless: bool = False):
+def setup_driver(headless: bool = True):
     """Создаёт и возвращает готовый WebDriver с учётом версии Chrome."""
     logging.getLogger("WDM").setLevel(logging.ERROR)
 
