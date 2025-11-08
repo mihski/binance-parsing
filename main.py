@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait # класс для  я�
 from selenium.webdriver.support import expected_conditions as EC # класс стандартных
 from selenium.webdriver.common.by import By # класс By для поиска элементов по разным стратегиям (CSS, ID, XPATH)
 import pandas as pd  # библиотека Pandas для работы с табличными данными
+from telrga_bot import send_telegram_message
 
 url=f"https://www.binance.com/en/fee/spotMaker"
 SAVE_DATA_FILE = 'save_data.json'  # Имя файла для данных предыдущего запроса
@@ -33,7 +34,7 @@ def fetch_current_data(driver, url):
         # Чтение данных (Pandas с StringIO)
         dfs = pd.read_html(StringIO(html_content))
         current_df = dfs[0]
-        print(f"количество столбцов найдено{len(current_df.columns)}")
+        print(f"количество найденых столбцов: {len(current_df.columns)}")
 
         # 3. Обработка столбцов
 
@@ -86,9 +87,11 @@ def compare_data(current_df, prev_data_file):
 
         # Сравнение: Pandas .equals() сравнивает каждый элемент
         if current_df.equals(prev_df):
-            print("✅ Данные не изменились. Таблица 'Liquidity Program' стабильна.")
+            print("✅ Данные не изменились.  'Liquidity Program' стабильна.")  
+                    
             return False, "NO_CHANGE"
         else:
+            send_telegram_message("ВНИМАНИЕ: Обнаружены изменения в таблице! ")
             print("🚨 ВНИМАНИЕ: Обнаружены изменения в таблице!")
             
             # Дополнительный вывод для отладки: показываем, что изменилось
@@ -119,6 +122,7 @@ if __name__ == "__main__":
 
         if current_data_df is None or current_data_df.empty:
             print("Пропуск сравнения: не удалось получить текущие данные.")
+
         else:
             # 1. Сравнение с предыдущими данными
             should_save, status = compare_data(current_data_df, SAVE_DATA_FILE)
@@ -131,10 +135,14 @@ if __name__ == "__main__":
                     indent=4
                 )
                 print(f"\n💾 Новые данные сохранены в {SAVE_DATA_FILE} (Статус: {status}).")
+            else:
+                send_telegram_message("Таблица 'Liquidity Program' не изменились ")  
 
     finally:
         if driver:
             driver.quit()
+
+
 
 
 
