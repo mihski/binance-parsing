@@ -1,15 +1,16 @@
-"""
-нахождение и загрузка вебдрайвера
-"""
-import re
-import platform
-import subprocess
 import logging
+import platform
+import re
+import subprocess
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 
+class ChromeDriverManage:
+    """определение версии браузера и загрузка актуального
+       WebDraiver
+    """
 
 def get_chrome_version() -> str:
     """Определяет версию Chrome для Windows, Linux или macOS."""
@@ -75,7 +76,7 @@ def setup_driver(headless: bool = True):
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-gpu")
- 
+
     if headless:
         options.add_argument("--headless=new")
 
