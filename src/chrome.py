@@ -6,11 +6,12 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-
+@staticmethod
 class ChromeDriverManage:
     """определение версии браузера и загрузка актуального
        WebDraiver
     """
+
 
 def get_chrome_version() -> str:
     """Определяет версию Chrome для Windows, Linux или macOS."""

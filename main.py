@@ -4,18 +4,13 @@
 import os
 from io import StringIO
 from selenium.webdriver.support.ui import WebDriverWait # класс для  явных ожиданий
-from chrome_driver import setup_driver
 import pandas as pd  # библиотека Pandas для работы с табличными дан
 from selenium.webdriver.support import expected_conditions as EC # класс стандартных
 from selenium.webdriver.common.by import By # класс By для поиска элементов по разным стратегиям (CSS, ID, XPATH)
-from telrga_bot import send_telegram_message
 
 url=f"https://www.binance.com/en/fee/spotMaker"
 SAVE_DATA_FILE = 'save_data.json'  # Имя файла для данных предыдущего запроса
-TARGET_TABLE_XPATH = "//table[contains(., 'Weekly Maker Volume Percentage Requirement')]"
-TARGET_LOCATOR = (By.XPATH, TARGET_TABLE_XPATH)
-TAIMEOUT=10
-driver=setup_driver
+
 def fetch_current_data(driver, url):
 
     try:
