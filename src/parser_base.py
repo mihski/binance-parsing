@@ -1,7 +1,7 @@
 from h11 import Data
 from pandas import DataFrame
 from chrome import get_chrome_driver
-from time import time
+import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -26,7 +26,7 @@ class Base_Parser:
         time.sleep(3)
         if self.driver.get(self.url)==None:
             print(f"страница не загрузилась")
-            
+
         print(f"Открытие страницы: {self.url}")
 
 
@@ -35,7 +35,7 @@ class Base_Parser:
         извлекаем таблицу
         """
         WebDriverWait(self.driver,10).until(
-            EC.presence_of_element_located(By.XPATH,xpath)
+            EC.presence_of_element_located((By.XPATH,xpath))
         )
         element= self.driver.find_element(By.XPATH,xpath)
         html_content = element.get_attribute('outerHTML')
@@ -50,5 +50,9 @@ class Base_Parser:
         """Закрывает браузер."""
         if self.driver:
             self.driver.quit()
+
+
+    def save_table_file():
+        pass
 
 

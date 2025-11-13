@@ -105,8 +105,8 @@ def get_chrome_driver(headless: bool = True):
     print(F"✅ WebDriver версии {chrome_version} успешно создан.")
     return driver
 
-if __name__== "__main__":
+# if __name__== "__main__":
 
-    get_chrome_driver()
+#     get_chrome_driver()
 
 
