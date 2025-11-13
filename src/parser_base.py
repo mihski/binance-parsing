@@ -4,6 +4,7 @@ from chrome import get_chrome_driver
 import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from io import StringIO
 import pandas as pd
@@ -30,20 +31,30 @@ class Base_Parser:
         print(f"Открытие страницы: {self.url}")
 
 
-    def fetch_table(self,xpath:str)-> DataFrame | None:
+    def fetch_table(self,xpath:str,timeout=10)-> DataFrame | None:
         """
         извлекаем таблицу
         """
-        WebDriverWait(self.driver,10).until(
-            EC.presence_of_element_located((By.XPATH,xpath))
-        )
-        element= self.driver.find_element(By.XPATH,xpath)
-        html_content = element.get_attribute('outerHTML')
 
-        tables = pd.read_html(StringIO(html_content))#списик таблиц если их несколько
-        table = tables[0]
-        print(f"Таблица успешно извлечена ({len(table.columns)} столбцов).")
-        return table
+        print(f"⏳ Ожидаем таблицу по XPath: {xpath}")
+
+        try:
+
+            WebDriverWait(self.driver,timeout).until(
+                EC.presence_of_element_located((By.XPATH,xpath))
+            )
+            element= self.driver.find_element(By.XPATH,xpath)
+            html_content = element.get_attribute('outerHTML')
+
+            tables = pd.read_html(StringIO(html_content))#списик таблиц если их несколько
+            table = tables[0]
+            print(f"Таблица успешно извлечена ({len(table.columns)} столбцов).")
+            return table
+        
+        except TimeoutException:
+
+            print("❌ Не удалось дождаться загрузки таблицы (Timeout).")
+            return None
 
 
     def close(self):
