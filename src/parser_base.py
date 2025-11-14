@@ -14,21 +14,18 @@ class Base_Parser:
     """
     базовый клас для парсинга страниц с таблицаим
     """
-    def __init__(self,url: str):
-
-        self.url=url
+    def __init__(self):
         self.driver = get_chrome_driver()
+        self.url = None
 
-    def open_page(self):
+    def open_page(self,url:str):
         """
         открытие страницы
         """
+        self.url = url
         self.driver.get(self.url)
-        time.sleep(3)
-        if self.driver.get(self.url)==None:
-            print(f"страница не загрузилась")
-
         print(f"Открытие страницы: {self.url}")
+        time.sleep(3)
 
 
     def fetch_table(self,xpath:str,timeout=10)-> DataFrame | None:
@@ -50,7 +47,7 @@ class Base_Parser:
             table = tables[0]
             print(f"Таблица успешно извлечена ({len(table.columns)} столбцов).")
             return table
-        
+
         except TimeoutException:
 
             print("❌ Не удалось дождаться загрузки таблицы (Timeout).")

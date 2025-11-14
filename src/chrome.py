@@ -72,7 +72,7 @@ def get_chrome_version_and_puth() -> str:
                 match = re.search(r'"([^"]*chrome.exe)"', command)
                 if match:
                     chrome_path = match.group(1) # Получаем путь без кавычек
-                    print("находим путь")
+                    print("находим путь к браузеру")
                     return chrome_version,chrome_path
                     break
             except FileNotFoundError:

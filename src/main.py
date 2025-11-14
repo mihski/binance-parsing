@@ -1,19 +1,32 @@
 from chrome import get_chrome_driver
-from pages.binance.feerate.locators import FeeRateURLs,FeeRateLocators
+from pages.binance.feerate.locators import FeeRateLocators
 from parser_base import Base_Parser
 
-url= FeeRateURLs.ALT_LIQUDITY_BOOST_URL
-#url= FeeRateURLs.SPOT_MAKER
-# locator = FeeRateLocators.SPOT_MAKER_LOCATOR
-# TABLE_XPATH =FeeRateLocators.SPOT_MAKER_TABLE_XPATH
-locator = FeeRateLocators.ALT_LIQUDITY_BOOST_TABLE_XPATH
-TABLE_XPATH =FeeRateLocators.ALT_LIQUDITY_BOOST_TABLE_XPATH
+LiquidityProgram =FeeRateLocators.LiquidityProgram
 
-parser = Base_Parser(url)
-parser.open_page()
-table=parser.fetch_table(TABLE_XPATH)
-if table is not None:
-    print(table.head())          # выводим первые 5 строк
-    print(table.columns.tolist()) # выводим заголовки столбцов
-else:
-    print("Таблица не найдена.")
+
+#    Список задач для каждой таблицы
+TASKS = [
+    {
+        "name": "USDⓈ-M Futures Maker",
+        "url": LiquidityProgram.USD_M_FUTUREES_MAKER_URL,
+        "xpath": LiquidityProgram.USD_M_FUTUREES_MAKER_XPAT
+    },
+    {
+        "name": "Spot Maker Program",
+        "url": LiquidityProgram.SPOT_MAKER_URL,
+        "xpath": LiquidityProgram.SPOT_MAKER_TABLE_XPATH
+    }
+]
+parser = Base_Parser()
+for task in TASKS:
+    parser.open_page(task["url"])
+    table=parser.fetch_table(task["xpath"])
+    if table is not None:
+        print(table.head(2))          # выводим первые 2 строки
+        print("***************************")
+    else:
+        print(f"Таблица {task["name"]}не найдена.")
+
+
+parser.close()
