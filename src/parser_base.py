@@ -1,3 +1,4 @@
+import os
 from h11 import Data
 from pandas import DataFrame
 from chrome import get_chrome_driver
@@ -8,6 +9,8 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from io import StringIO
 import pandas as pd
+from telrgam_bot import send_telegram_message
+
 
 
 class Base_Parser:
@@ -53,14 +56,65 @@ class Base_Parser:
             print("❌ Не удалось дождаться загрузки таблицы (Timeout).")
             return None
 
-
     def close(self):
         """Закрывает браузер."""
         if self.driver:
             self.driver.quit()
 
+    def save_to_file(self, table_data: DataFrame, 
+                     file_name: str, subfolder:str,
+                     directory: str = "data", ):
+        """
+        Сохраняет DataFrame в CSV файл. Создает каталог, если он не существует.
+        
+        """
+      
+        # заменяем недопустимые символы
+        clean_file_name = file_name.replace(" ", "_").\
+        replace("Ⓢ", "S").replace("-", "_")
+        clean_subfolder =subfolder.replace(" ", "_")
+        
+        full_directory_path = os.path.join(directory,clean_subfolder)
+        file_path = os.path.join(full_directory_path, f"{clean_file_name}.csv")         
+        
 
-    def save_table_file():
-        pass
+        try:        
+            os.makedirs(full_directory_path,exist_ok=True)          
+            table_data.to_csv(file_path, index=False, encoding='utf-8')
+            print(f"💾 Данные успешно сохранены в: {file_path}")
+                                
+        except Exception as e:
+            print(f"❌ Ошибка при сохранении файла {file_name}: {e}")
+
+        def close(self):
+            # ... (остальной код close)
+            pass
+
+    def compare_file(self,current_df,saved_data_file):
+        if not os.path.exists(saved_data_file):
+            print("📁 Первый запуск. Файл предыдущих данных не найден.")
+            return True, "INITIAL_RUN" # Возвращаем True, чтобы сохранить текущие данные
+    
+        try:
+            saved_df = pd.read_csv(saved_data_file, encoding='utf-8')
+        
+        except Exception as e:
+            print(f"⚠️ Ошибка чтения старого файла {saved_data_file}: {e}")
+            return True, "READ_ERROR" 
+        
+        if current_df.equals(saved_df):
+            print("файл не изменен")
+            return False, "NO_CHANGE" 
+        else:
+            print("файл  изменен")
+
+            send_telegram_message(f"изменилась таблица {saved_data_file}")
+            
+            return True, "CHANGED" 
+    
 
 
+
+    
+        
+            
