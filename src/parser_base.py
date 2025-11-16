@@ -69,20 +69,14 @@ class Base_Parser:
         
         """
       
-        # заменяем недопустимые символы
-        clean_file_name = file_name.replace(" ", "_").\
-        replace("Ⓢ", "S").replace("-", "_")
-        clean_subfolder =subfolder.replace(" ", "_")
+        full_directory_path = os.path.join(directory,subfolder)
+        file_path = os.path.join(full_directory_path, f"{file_name}.csv")         
         
-        full_directory_path = os.path.join(directory,clean_subfolder)
-        file_path = os.path.join(full_directory_path, f"{clean_file_name}.csv")         
-        
-
         try:        
             os.makedirs(full_directory_path,exist_ok=True)          
             table_data.to_csv(file_path, index=False, encoding='utf-8')
             print(f"💾 Данные успешно сохранены в: {file_path}")
-                                
+            return file_path                    
         except Exception as e:
             print(f"❌ Ошибка при сохранении файла {file_name}: {e}")
 

@@ -6,7 +6,6 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-
 def get_chrome_version_and_puth() -> str:
     """Определяет версию Chrome для Windows, Linux или macOS."""
     system = platform.system()
