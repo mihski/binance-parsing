@@ -1,7 +1,7 @@
 import os
 from h11 import Data
 from pandas import DataFrame
-from chrome import get_chrome_driver
+from src.chrome import get_chrome_driver
 import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -9,7 +9,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from io import StringIO
 import pandas as pd
-from telrgam_bot import send_telegram_message
+from src.tg_aletrer.telrgam_bot import send_telegram_message
 
 
 
@@ -94,6 +94,7 @@ class Base_Parser:
         
         except Exception as e:
             print(f"⚠️ Ошибка чтения старого файла {saved_data_file}: {e}")
+            send_telegram_message(f"Ошибка чтения {saved_data_file}")
             return True, "READ_ERROR" 
         
         if current_df.equals(saved_df):

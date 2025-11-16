@@ -1,7 +1,7 @@
 import os
-from binance.feerate.locators import FeeRateLocators
-from parser_base import Base_Parser
-from binance.feerate.list_pages import list_tables
+from src.binance.feerate.locators import FeeRateLocators
+from src.parser_base import Base_Parser
+from src.binance.feerate.list_pages import list_tables
 
 def main_parser():
     parser = Base_Parser()
@@ -11,8 +11,9 @@ def main_parser():
         if table is not None:
             print(table.head(1))    # выводим первкю строку            
             file_path = os.path.join("data", tab['subfolder'], f"{tab['name']}.csv")   
-            should_save , starus_massage = parser.compare_file(table,file_path)
-            if should_save== True:           
+            should_save , status_massage = parser.compare_file(table,file_path)
+            if should_save == True: 
+                print( status_massage)          
                 parser.save_to_file(table, tab['name'],tab['subfolder'], directory="data")
                 print("***************************")
         else:

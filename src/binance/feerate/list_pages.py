@@ -1,4 +1,4 @@
-from binance.feerate.locators import FeeRateLocators
+from src.binance.feerate.locators import FeeRateLocators
 LiquidityProgram =FeeRateLocators.LiquidityProgram
 
 #    Список задач для каждой таблицы

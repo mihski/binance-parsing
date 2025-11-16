@@ -1,4 +1,4 @@
-from env import TG_BOT_TOKEN
+from src.env import TG_BOT_TOKEN
 import requests
 
 # TODO: in .env
