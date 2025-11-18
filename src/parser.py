@@ -9,11 +9,11 @@ def main_parser():
         parser.open_page(tab["url"])
         table=parser.fetch_table(tab["xpath"])
         if table is not None:
-            print(table.head(1))    # выводим первкю строку            
-            file_path = os.path.join("data", tab['subfolder'], f"{tab['name']}.csv")   
+            print(table.head(2))    # выводим первкю строку
+            file_path = os.path.join("data", tab['subfolder'], f"{tab['name']}.csv")
             should_save , status_massage = parser.compare_file(table,file_path)
-            if should_save == True: 
-                print( status_massage)          
+            if should_save == True:
+                print( status_massage)
                 parser.save_to_file(table, tab['name'],tab['subfolder'], directory="data")
                 print("***************************")
         else:
