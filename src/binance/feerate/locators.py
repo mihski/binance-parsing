@@ -27,7 +27,7 @@ class FeeRateLocators:
     class Trading:
         BASE = "https://www.binance.com/en/fee"
 
-        SPOT_MARJIN_URL = f"{BASE}/traiding"
+        SPOT_MARJIN_URL = f"{BASE}/trading"
         SPOT_MARJIN_XPATH ="//div[@id='bn-tab-pane-0']//table"
 
 
