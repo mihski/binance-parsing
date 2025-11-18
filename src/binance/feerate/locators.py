@@ -14,7 +14,7 @@ class FeeRateLocators:
         SPOT_MAKER_URL = f"{BASE}/spotMaker"
         SPOT_MAKER_TABLE_XPATH ="//div[@id='bn-tab-pane-0']//table"
 
-        ALT_LIQUDITY_BOOST_URL= f"{BASE}e/altCoinLiquidityBoost"
+        ALT_LIQUDITY_BOOST_URL= f"{BASE}/altCoinLiquidityBoost"
         ALT_LIQUDITY_BOOST_TABLE_XPATH = "//div[@id='bn-tab-pane-1']//table"
 
         USD_M_FUTUREES_MAKER_URL= f"{BASE}/umMaker"
