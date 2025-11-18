@@ -1,21 +1,22 @@
+from src.tg_alerting.config import TG_BOT_TOKEN
 import requests
 
-TG_BOT_TOKEN= "8230226100:AAEe3t6wRsclc9EmqBiV0biLQMXw-0x6Q50"
+# TODO: in .env
 CHAT_ID="410455335"
-def send_telegram_message(message_text):
+def send_telegram_message(message_text:str,chat_id: int):
     """Отправляет сообщение через Telegram API."""
-    
+
     # URL для отправки сообщения (используем стандартный метод sendMessage)
     url = f"https://api.telegram.org/bot{TG_BOT_TOKEN}/sendMessage"
 
-    
+
     # Параметры запроса
     params = {
         "chat_id": CHAT_ID,
         "text": message_text,
         "parse_mode": "HTML" # Позволяет использовать HTML-теги для форматирования
     }
-    
+
     try:
         response = requests.post(url, data=params)
         response.raise_for_status() # Вызывает ошибку, если запрос не удался
