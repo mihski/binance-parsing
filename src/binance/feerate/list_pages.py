@@ -1,6 +1,7 @@
 from src.binance.feerate.locators import FeeRateLocators
 LiquidityProgram = FeeRateLocators.LiquidityProgram
 Trading = FeeRateLocators.Trading
+SpotPromotions= FeeRateLocators.SpotPromotions
 
 #    Список таблиц внутри разделов
 list_tables = {
@@ -38,6 +39,69 @@ list_tables = {
                 "url": Trading.SPOT_MARJIN_URL,
                 "xpath": Trading.SPOT_MARJIN_XPATH,
                 "subfolder": "Spot_margin"
-            }
-        ]
-    }
+            },
+            {
+            "name": "Futures_USD_M",
+            "url": Trading.FUTURES_USD_M_URL,
+            "xpath": Trading.FUTURES_USD_M_XPATH,
+            "subfolder": "Trading"
+            },
+            {
+            "name": "Futures_COIN_M",
+            "url": Trading.FUTURES_COIN_M_URL,
+            "xpath": Trading.FUTURES_COIN_M_XPATH,
+            "subfolder": "Trading"
+            },
+            {
+            "name": "Options",
+            "url": Trading.OPTIONS_URL,
+            "xpath": Trading.OPTIONS_XPATH,
+            "subfolder": "Trading"
+            },
+            {
+            "name": "NFT",
+            "url": Trading.NFT_URL,  
+            "xpath": Trading.NFT_XPATH, 
+            "subfolder": "Trading"
+            },
+            {
+            "name": "P2P",
+            "url": Trading.P2P_URL, 
+            "xpath": Trading.P2P_XPATH,
+            "subfolder": "Trading"
+            },
+            {
+            "name": "Fiat",
+            "url": Trading.FIAT_URL,
+            "xpath": Trading.FIAT_XPATH, 
+            "subfolder": "Trading"
+            },    
+        ], 
+     "SpotPromotions":[
+         {
+            "name": "ZeroFee",
+            "url": SpotPromotions,
+            "xpath": SpotPromotions.ZERO_FEE_TABLE_XPATH,
+            "subfolder": "SpotPromotions"
+        },
+        {
+            "name": "FDUSD",
+            "url": SpotPromotions.FDUSD_URL,
+            "xpath": SpotPromotions.FDUSD_TABLE_XPATH,
+            "subfolder": "SpotPromotions"
+        },
+        {
+            "name": "EuroPromo",
+            "url": SpotPromotions.EVROPROMO_URL,  # В исходнике EVROPROMO
+            "xpath": SpotPromotions.EVROPROMO_TABLE_XPATH,
+            "subfolder": "SpotPromotions"
+        },
+        {
+            "name": "USDCPromo",
+            "url": SpotPromotions.USDCPROMO_URL,
+            "xpath": SpotPromotions.USDCPROMO_TABLE_XPATH,
+            "subfolder": "SpotPromotions"
+        }
+     ]
+        
+}
