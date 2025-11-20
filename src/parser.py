@@ -1,11 +1,10 @@
 import os
-from src.binance.feerate.locators import FeeRateLocators
 from src.parser_base import Base_Parser
 from src.binance.feerate.list_pages import list_tables
 
 def main_parser():
     parser = Base_Parser()
-    for section_name, section_list in list_tables.items():
+    for section_list in list_tables.values():
         for tab in section_list:
             parser.open_page(tab["url"])
             table=parser.fetch_table(tab["xpath"])
@@ -18,7 +17,7 @@ def main_parser():
                     parser.save_to_file(table, tab['name'],tab['subfolder'], directory="data")
                     print("***************************")
             else:
-                print(f"Таблица {tab["name"]}не найдена.")
+                print(f"Таблица {tab["name"]} не найдена.")
     parser.close()
 
 if __name__ == "__main__" :

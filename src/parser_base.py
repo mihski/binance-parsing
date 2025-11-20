@@ -32,30 +32,55 @@ class Base_Parser:
         time.sleep(2)
 
 
+    def _get_element(self, xpath: str, timeout: int = 10):
+        """
+        Приватный ,базовый метод для всех элементов: ждет и возвращает WebElement.
+        """
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located((By.XPATH, xpath))
+            )
+            return self.driver.find_element(By.XPATH, xpath)
+        except TimeoutException:
+            print(f"❌ Элемент не найден по XPath: {xpath} (Timeout)")
+            return None
+
+
+    def fetch_text(self, xpath: str, timeout: int = 10) -> str | None:
+        """
+        извлечение текста из любого элемента
+        (даты, заголовки, цены и т.д.)
+        """
+        print(f"⏳ Ожидаем текст по XPath: {xpath}")
+        element = self._get_element(xpath, timeout)
+
+        if element:
+            text = element.text.strip() #  убирает лишние пробелы
+            print(f"Текст успешно извлечен: '{text}'")
+            return text
+        return None
+
     def fetch_table(self,xpath:str,timeout=10)-> DataFrame | None:
         """
         извлекаем таблицу
         """
-
         print(f"⏳ Ожидаем таблицу по XPath: {xpath}")
+        element= self._get_element(xpath, timeout)
 
-        try:
+        if element !=None:
+            try:
 
-            WebDriverWait(self.driver,timeout).until(
-                EC.presence_of_element_located((By.XPATH,xpath))
-            )
-            element= self.driver.find_element(By.XPATH,xpath)
-            html_content = element.get_attribute('outerHTML')
+                html_content = element.get_attribute('outerHTML')
+                tables = pd.read_html(StringIO(html_content))#списик таблиц если их несколько
+                table = tables[0]
+                print(f"Таблица успешно извлечена ({len(table.columns)} столбцов).")
+                return table
 
-            tables = pd.read_html(StringIO(html_content))#списик таблиц если их несколько
-            table = tables[0]
-            print(f"Таблица успешно извлечена ({len(table.columns)} столбцов).")
-            return table
-
-        except TimeoutException:
-            send_telegram_message(f"Не удалось дождаться загрузки таблицы ",CHAT_ID_ERRORS)
-            print("❌ Не удалось дождаться загрузки таблицы (Timeout).")
-            return None
+            except TimeoutException:
+            #    send_telegram_message(f"Не удалось дождаться загрузки таблицы ",CHAT_ID_ERRORS)
+                print("❌ Не удалось дождаться загрузки таблицы (Timeout).")
+                return None
+        return None
 
     def close(self):
         """Закрывает браузер."""
@@ -95,7 +120,7 @@ class Base_Parser:
 
         except Exception as e:
             print(f"⚠️ Ошибка чтения старого файла {saved_data_file}: {e}")
-            send_telegram_message(f"Ошибка чтения сохраненного файла {saved_data_file}",CHAT_ID_ERRORS)
+        #    send_telegram_message(f"Ошибка чтения сохраненного файла {saved_data_file}",CHAT_ID_ERRORS)
             return True, "READ_ERROR"
 
         if current_df.equals(saved_df):
@@ -104,7 +129,7 @@ class Base_Parser:
         else:
             print("файл  изменен")
 
-            send_telegram_message(f"изменилась таблица {saved_data_file}",CHAT_ID_UPDATES)
+         #   send_telegram_message(f"изменилась таблица {saved_data_file}",CHAT_ID_UPDATES)
 
             return True, "CHANGED"
 

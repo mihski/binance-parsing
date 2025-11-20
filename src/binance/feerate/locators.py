@@ -1,5 +1,5 @@
-from pyclbr import Class
-from selenium.webdriver.common.by import By
+# from pyclbr import Class
+# from selenium.webdriver.common.by import By
 #   https://www.binance.com/en/fee
 
 """Locators and Urls for Fee Rate"""
@@ -30,7 +30,6 @@ class FeeRateLocators:
         SPOT_MARJIN_URL = f"{BASE}/trading"
         SPOT_MARJIN_XPATH ="//div[@id='bn-tab-pane-0']//table"
 
-        # Добавленные локаторы
         FUTURES_USD_M_URL = f"{BASE}/futureFee"
         FUTURES_USD_M_XPATH = "//div[@id='bn-tab-pane-1']//table"
 
@@ -58,8 +57,8 @@ class FeeRateLocators:
         FDUSD_URL = f"{BASE}/fdusd"
         FDUSD_TABLE_XPATH ="//div[@id='bn-tab-1']//table"
 
-        EVROPROMO_URL = f"{BASE}/eur"
-        EVROPROMO_TABLE_XPATH ="//div[@id='bn-tab-2']//table"
+        EUROPROMO_URL = f"{BASE}/eur"
+        EUROPROMO_TABLE_XPATH ="//div[@id='bn-tab-2']//table"
 
         USDCPROMO_URL = f"{BASE}/usdcPromo"
         USDCPROMO_TABLE_XPATH ="//div[@id='bn-tab-3']//table"
@@ -69,7 +68,7 @@ class FeeRateLocators:
 
 
 
-        
+
 
 
 
