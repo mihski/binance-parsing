@@ -55,7 +55,7 @@ class Base_Parser:
         element = self._get_element(xpath, timeout)
 
         if element:
-            text = element.text.strip() #  убирает лишние пробелы
+            text = element.text.strip() # убирает лишние пробелы
             print(f"Текст успешно извлечен: '{text}'")
             return text
         return None
