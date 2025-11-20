@@ -29,7 +29,7 @@ class Base_Parser:
         self.url = url
         self.driver.get(self.url)
         print(f"Открытие страницы: {self.url}")
-        time.sleep(3)
+        time.sleep(2)
 
 
     def fetch_table(self,xpath:str,timeout=10)-> DataFrame | None:

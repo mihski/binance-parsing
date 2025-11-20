@@ -14,7 +14,7 @@ class FeeRateLocators:
         SPOT_MAKER_URL = f"{BASE}/spotMaker"
         SPOT_MAKER_TABLE_XPATH ="//div[@id='bn-tab-pane-0']//table"
 
-        ALT_LIQUDITY_BOOST_URL= f"{BASE}e/altCoinLiquidityBoost"
+        ALT_LIQUDITY_BOOST_URL= f"{BASE}/altCoinLiquidityBoost"
         ALT_LIQUDITY_BOOST_TABLE_XPATH = "//div[@id='bn-tab-pane-1']//table"
 
         USD_M_FUTUREES_MAKER_URL= f"{BASE}/umMaker"
@@ -27,12 +27,49 @@ class FeeRateLocators:
     class Trading:
         BASE = "https://www.binance.com/en/fee"
 
-        SPOT_MARJIN_URL = f"{BASE}/traiding"
+        SPOT_MARJIN_URL = f"{BASE}/trading"
         SPOT_MARJIN_XPATH ="//div[@id='bn-tab-pane-0']//table"
 
+        # Добавленные локаторы
+        FUTURES_USD_M_URL = f"{BASE}/futureFee"
+        FUTURES_USD_M_XPATH = "//div[@id='bn-tab-pane-1']//table"
+
+        FUTURES_COIN_M_URL = f"{BASE}/deliveryFee"
+        FUTURES_COIN_M_XPATH = "//div[@id='bn-tab-pane-2']//table"
+
+        OPTIONS_URL = f"{BASE}/optionsTrading"
+        OPTIONS_XPATH = "//div[@id='bn-tab-pane-3']//table"
+
+        NFT_URL = f"{BASE}/nftFee"
+        NFT_XPATH = "//div[@id='bn-tab-pane-4']//table"
+
+        P2P_URL = f"{BASE}/p2pFeeRate"
+        P2P_XPATH = "//div[@id='bn-tab-pane-5']//table"
+
+        FIAT_URL = f"{BASE}/fiatSpot"
+        FIAT_XPATH = "//div[@id='bn-tab-pane-6']//table"
+
+    class SpotPromotions:
+        BASE = "https://www.binance.com/en/fee"
+
+        ZERO_FEE_URL = f"{BASE}/tradingPromote"
+        ZERO_FEE_TABLE_XPATH ="//div[@id='bn-tab-0']//table"
+
+        FDUSD_URL = f"{BASE}/fdusd"
+        FDUSD_TABLE_XPATH ="//div[@id='bn-tab-1']//table"
+
+        EVROPROMO_URL = f"{BASE}/eur"
+        EVROPROMO_TABLE_XPATH ="//div[@id='bn-tab-2']//table"
+
+        USDCPROMO_URL = f"{BASE}/usdcPromo"
+        USDCPROMO_TABLE_XPATH ="//div[@id='bn-tab-3']//table"
 
 
-        pass
+
+
+
+
+        
 
 
 
