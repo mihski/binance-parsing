@@ -80,7 +80,7 @@ list_tables = {
      "SpotPromotions":[
          {
             "name": "ZeroFee",
-            "url": SpotPromotions,
+            "url": SpotPromotions.ZERO_FEE_URL,
             "xpath": SpotPromotions.ZERO_FEE_TABLE_XPATH,
             "subfolder": "SpotPromotions"
         },
