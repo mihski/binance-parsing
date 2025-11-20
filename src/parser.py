@@ -1,9 +1,11 @@
 import os
 from src.parser_base import Base_Parser
 from src.binance.feerate.list_pages import list_tables
+from src.binance.feerate.locators import FeeRateLocators
 
 def main_parser():
     parser = Base_Parser()
+    marketname= FeeRateLocators.NAME_MARCET
     for section_list in list_tables.values():
         for tab in section_list:
             parser.open_page(tab["url"])
@@ -14,7 +16,7 @@ def main_parser():
                 should_save , status_massage = parser.compare_file(table,file_path)
                 if should_save == True:
                     print( status_massage)
-                    parser.save_to_file(table, tab['name'],tab['subfolder'], directory="data")
+                    parser.save_to_file(table, tab['name'],tab['subfolder'],marketname, directory="data")
                     print("***************************")
             else:
                 print(f"Таблица {tab["name"]} не найдена.")

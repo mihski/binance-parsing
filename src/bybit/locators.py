@@ -1,6 +1,3 @@
-# from pyclbr import Class
-# from selenium.webdriver.common.by import By
-#   https://www.binance.com/en/fee
 
 """Locators for bybit"""
 

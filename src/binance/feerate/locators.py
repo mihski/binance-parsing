@@ -7,6 +7,7 @@
 class FeeRateLocators:
     """локаторов для раздела Fee Rate """
     BASE = "https://www.binance.com"
+    NAME_MARCET= "binance"
 
     class LiquidityProgram:
         BASE = "https://www.binance.com/en/fee"

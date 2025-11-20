@@ -60,6 +60,7 @@ class Base_Parser:
             return text
         return None
 
+
     def fetch_table(self,xpath:str,timeout=10)-> DataFrame | None:
         """
         извлекаем таблицу
@@ -89,13 +90,15 @@ class Base_Parser:
 
     def save_to_file(self, table_data: DataFrame,
                      file_name: str, subfolder:str,
-                     directory: str = "data", ):
+                     market_name: str,
+                     directory: str = "data", 
+                     ):
         """
         Сохраняет DataFrame в CSV файл. Создает каталог, если он не существует.
 
         """
 
-        full_directory_path = os.path.join(directory,subfolder)
+        full_directory_path = os.path.join(directory,market_name,subfolder)
         file_path = os.path.join(full_directory_path, f"{file_name}.csv")
 
         try:
@@ -135,6 +138,24 @@ class Base_Parser:
 
 
 
+    def save_text_to_file(self, text_data: str, file_name: str, subfolder: str, directory: str = "data", extension: str = "txt"):
+        """
+        Сохраняет строку (текст) в файл.
+        """
+        full_directory_path = os.path.join(directory, subfolder)
+        file_path = os.path.join(full_directory_path, f"{file_name}.{extension}")
+
+        try:
+            os.makedirs(full_directory_path, exist_ok=True)
+            
+            # Открываем файл для записи ('w' - перезапись, 'a' - добавление в конец)
+            with open(file_path, "w", encoding='utf-8') as f:
+                f.write(text_data)
+                
+            print(f"📝 Текст успешно сохранен в: {file_path}")
+            return file_path
+        except Exception as e:
+            print(f"❌ Ошибка при сохранении текста {file_name}: {e}")
 
 
 

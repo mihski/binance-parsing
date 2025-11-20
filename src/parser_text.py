@@ -9,7 +9,9 @@ def text_parser():
 
     parser = Base_Parser()
     parser.open_page(url)
-    parser.fetch_text(xpath)
+    text_date=parser.fetch_text(xpath)
+    parser.save_text_to_file(text_date,"date","bybit","data")
+
 
 
 
