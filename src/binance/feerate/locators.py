@@ -53,7 +53,7 @@ class FeeRateLocators:
         BASE = "https://www.binance.com/en/fee"
 
         ZERO_FEE_URL = f"{BASE}/tradingPromote"
-        ZERO_FEE_TABLE_XPATH ="//div[@id='bn-pane-tab-0']//table"
+        ZERO_FEE_TABLE_XPATH ="//div[@id='bn-tab-pane-0']//table"
 
         FDUSD_URL = f"{BASE}/fdusd"
         FDUSD_TABLE_XPATH ="//div[@id='bn-tab-pane-1']//table"

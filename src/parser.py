@@ -30,7 +30,8 @@ def check_data_from_bybit():
 
     parser = Base_Parser()
     parser.open_page(url)
-    parser.fetch_text(xpath)
+    text = parser.fetch_text(xpath)
+    parser.save_text_to_file(text,"date","bytext")
 
 if __name__ == "__main__" :
    check_data_from_bybit()

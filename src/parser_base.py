@@ -13,7 +13,6 @@ from src.tg_alerting.telrgam_bot import send_telegram_message
 from src.tg_alerting.config import CHAT_ID_ERRORS,CHAT_ID_UPDATES
 
 
-
 class Base_Parser:
     """
     базовый клас для парсинга страниц с таблицаим
@@ -116,14 +115,14 @@ class Base_Parser:
     def compare_file(self,current_df,saved_data_file):
         if not os.path.exists(saved_data_file):
             print("📁 Первый запуск. Файл предыдущих данных не найден.")
-            return True, "INITIAL_RUN" # Возвращаем True, чтобы сохранить текущие данные
+            return True, "INITIAL_RUN" 
 
         try:
             saved_df = pd.read_csv(saved_data_file, encoding='utf-8')
 
         except Exception as e:
             print(f"⚠️ Ошибка чтения старого файла {saved_data_file}: {e}")
-        #    send_telegram_message(f"Ошибка чтения сохраненного файла {saved_data_file}",CHAT_ID_ERRORS)
+            send_telegram_message(f"Ошибка чтения сохраненного файла {saved_data_file}",CHAT_ID_ERRORS)
             return True, "READ_ERROR"
 
         if current_df.equals(saved_df):
@@ -132,7 +131,7 @@ class Base_Parser:
         else:
             print("файл  изменен")
 
-         #   send_telegram_message(f"изменилась таблица {saved_data_file}",CHAT_ID_UPDATES)
+            send_telegram_message(f"изменилась таблица {saved_data_file}",CHAT_ID_UPDATES)
 
             return True, "CHANGED"
 
@@ -146,9 +145,8 @@ class Base_Parser:
         file_path = os.path.join(full_directory_path, f"{file_name}.{extension}")
 
         try:
-            os.makedirs(full_directory_path, exist_ok=True)
+            os.makedirs(full_directory_path, exist_ok=True)            
             
-            # Открываем файл для записи ('w' - перезапись, 'a' - добавление в конец)
             with open(file_path, "w", encoding='utf-8') as f:
                 f.write(text_data)
                 
