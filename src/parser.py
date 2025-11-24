@@ -1,25 +1,43 @@
 import os
-from src.binance.feerate.locators import FeeRateLocators
-from src.parser_base import Base_Parser
+from src.baze_parser import Base_Parser
 from src.binance.feerate.list_pages import list_tables
+from src.binance.feerate.locators import FeeRateLocators
+from src.bybit.locators import BybitLocators
 
 def main_parser():
     parser = Base_Parser()
-    for section_name, section_list in list_tables.items():
+    marketname= FeeRateLocators.NAME_MARCET
+    for section_list in list_tables.values():
         for tab in section_list:
             parser.open_page(tab["url"])
             table=parser.fetch_table(tab["xpath"])
             if table is not None:
                 print(table.head(2))    # выводим первкю строку
-                file_path = os.path.join("data", tab['subfolder'], f"{tab['name']}.csv")
-                should_save , status_massage = parser.compare_file(table,file_path)
+                file_path = os.path.join("data",marketname,tab['subfolder'], f"{tab['name']}.csv")
+                should_save , status_massage = parser.compare_table_file(table,file_path)
                 if should_save == True:
                     print( status_massage)
-                    parser.save_to_file(table, tab['name'],tab['subfolder'], directory="data")
+                    parser.save_table_to_file(table, tab['name'],tab['subfolder'],marketname, directory="data")
                     print("***************************")
             else:
-                print(f"Таблица {tab["name"]}не найдена.")
+                print(f"Таблица {tab["name"]} не найдена.")
     parser.close()
 
+def check_data_from_bybit():
+
+    url = BybitLocators.DATA_URL
+    xpath= BybitLocators.DETA_XPART
+
+    parser = Base_Parser()
+    parser.open_page(url)
+    text = parser.fetch_text(xpath)
+    file_path = os.path.join("data","bytext","date.txt")
+    
+    parser.compare_text_file(text,file_path)
+    parser.save_text_to_file(text,"date","bytext")
+    
 if __name__ == "__main__" :
-    main_parser()
+   check_data_from_bybit()
+
+
+ 

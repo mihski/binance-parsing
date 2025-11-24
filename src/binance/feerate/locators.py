@@ -1,5 +1,5 @@
-from pyclbr import Class
-from selenium.webdriver.common.by import By
+# from pyclbr import Class
+# from selenium.webdriver.common.by import By
 #   https://www.binance.com/en/fee
 
 """Locators and Urls for Fee Rate"""
@@ -7,12 +7,13 @@ from selenium.webdriver.common.by import By
 class FeeRateLocators:
     """локаторов для раздела Fee Rate """
     BASE = "https://www.binance.com"
+    NAME_MARCET= "binance"
 
     class LiquidityProgram:
         BASE = "https://www.binance.com/en/fee"
 
         SPOT_MAKER_URL = f"{BASE}/spotMaker"
-        SPOT_MAKER_TABLE_XPATH ="//div[@id='bn-tab-pane-0']//table"
+        SPOT_MAKER_TABLE_XPATH ="//div[@id='bn-tab-pane-0']//table" 
 
         ALT_LIQUDITY_BOOST_URL= f"{BASE}/altCoinLiquidityBoost"
         ALT_LIQUDITY_BOOST_TABLE_XPATH = "//div[@id='bn-tab-pane-1']//table"
@@ -30,7 +31,6 @@ class FeeRateLocators:
         SPOT_MARJIN_URL = f"{BASE}/trading"
         SPOT_MARJIN_XPATH ="//div[@id='bn-tab-pane-0']//table"
 
-        # Добавленные локаторы
         FUTURES_USD_M_URL = f"{BASE}/futureFee"
         FUTURES_USD_M_XPATH = "//div[@id='bn-tab-pane-1']//table"
 
@@ -53,23 +53,23 @@ class FeeRateLocators:
         BASE = "https://www.binance.com/en/fee"
 
         ZERO_FEE_URL = f"{BASE}/tradingPromote"
-        ZERO_FEE_TABLE_XPATH ="//div[@id='bn-tab-0']//table"
+        ZERO_FEE_TABLE_XPATH ="//div[@id='bn-tab-pane-0']//table"
 
         FDUSD_URL = f"{BASE}/fdusd"
-        FDUSD_TABLE_XPATH ="//div[@id='bn-tab-1']//table"
+        FDUSD_TABLE_XPATH ="//div[@id='bn-tab-pane-1']//table"
 
-        EVROPROMO_URL = f"{BASE}/eur"
-        EVROPROMO_TABLE_XPATH ="//div[@id='bn-tab-2']//table"
+        EUROPROMO_URL = f"{BASE}/eur"
+        EUROPROMO_TABLE_XPATH ="//div[@id='bn-tab-pane-2']//table"
 
         USDCPROMO_URL = f"{BASE}/usdcPromo"
-        USDCPROMO_TABLE_XPATH ="//div[@id='bn-tab-3']//table"
+        USDCPROMO_TABLE_XPATH ="//div[@id='bn-tab-pane-3']//table"
 
 
 
 
 
 
-        
+
 
 
 

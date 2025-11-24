@@ -1,0 +1,12 @@
+Level,30-Day Trade Volume (USD*)Trade volume will be converted into USD equivalent values based on the exchange rate under Multi-Asset mode.Learn more,and/or,BNB Balance,MakerA “Maker” is a trader who places an order at a limit price.,TakerA “Taker” is a trader who places an order at a market price.
+,,,,,
+Regular User,"< 15,000,000 USD",or,≥ 0 BNB,0.0200%,0.0500%
+VIP 1,"≥ 15,000,000 USD",and,≥ 25 BNB,0.0160%,0.0400%
+VIP 2,"≥ 50,000,000 USD",and,≥ 100 BNB,0.0140%,0.0350%
+VIP 3,"≥ 100,000,000 USD",and,≥ 250 BNB,0.0120%,0.0320%
+VIP 4,"≥ 600,000,000 USD",and,≥ 500 BNB,0.0100%,0.0300%
+VIP 5,"≥ 1,000,000,000 USD",and,"≥ 1,000 BNB",0.0080%,0.0270%
+VIP 6,"≥ 2,500,000,000 USD",and,"≥ 1,750 BNB",0.0060%,0.0250%
+VIP 7,"≥ 5,000,000,000 USD",and,"≥ 3,000 BNB",0.0040%,0.0220%
+VIP 8,"≥ 12,500,000,000 USD",and,"≥ 4,500 BNB",0.0020%,0.0200%
+VIP 9,"≥ 25,000,000,000 USD",and,"≥ 5,500 BNB",0.0000%,0.0170%
