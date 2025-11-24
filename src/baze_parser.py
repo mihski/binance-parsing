@@ -87,7 +87,7 @@ class Base_Parser:
         if self.driver:
             self.driver.quit()
 
-    def save_to_file(self, table_data: DataFrame,
+    def save_table_to_file(self, table_data: DataFrame,
                      file_name: str, subfolder:str,
                      market_name: str,
                      directory: str = "data", 
@@ -96,10 +96,8 @@ class Base_Parser:
         Сохраняет DataFrame в CSV файл. Создает каталог, если он не существует.
 
         """
-
         full_directory_path = os.path.join(directory,market_name,subfolder)
         file_path = os.path.join(full_directory_path, f"{file_name}.csv")
-
         try:
             os.makedirs(full_directory_path,exist_ok=True)
             table_data.to_csv(file_path, index=False, encoding='utf-8')
@@ -108,11 +106,8 @@ class Base_Parser:
         except Exception as e:
             print(f"❌ Ошибка при сохранении файла {file_name}: {e}")
 
-        def close(self):
-            # ... (остальной код close)
-            pass
 
-    def compare_file(self,current_df,saved_data_file):
+    def compare_table_file(self,current_df,saved_data_file):
         if not os.path.exists(saved_data_file):
             print("📁 Первый запуск. Файл предыдущих данных не найден.")
             return True, "INITIAL_RUN" 
@@ -135,8 +130,6 @@ class Base_Parser:
 
             return True, "CHANGED"
 
-
-
     def save_text_to_file(self, text_data: str, file_name: str, subfolder: str, directory: str = "data", extension: str = "txt"):
         """
         Сохраняет строку (текст) в файл.
@@ -145,8 +138,7 @@ class Base_Parser:
         file_path = os.path.join(full_directory_path, f"{file_name}.{extension}")
 
         try:
-            os.makedirs(full_directory_path, exist_ok=True)            
-            
+            os.makedirs(full_directory_path, exist_ok=True)                   
             with open(file_path, "w", encoding='utf-8') as f:
                 f.write(text_data)
                 
@@ -155,5 +147,17 @@ class Base_Parser:
         except Exception as e:
             print(f"❌ Ошибка при сохранении текста {file_name}: {e}")
 
+    def compare_text_file(self,current_text,saved_data_file):
+        if not os.path.exists(saved_data_file):
+            print("📁 Первый запуск. Файл предыдущих данных не найден.")
+            return True, "INITIAL_RUN"
 
-
+        with open(saved_data_file,"r",encoding='utf-8') as f:  
+            text= f.read()          
+            if text==current_text:
+                print(f"дата {text} не изменилась")          
+                return False, "NO_CHANGE" 
+            print(f"новая дата {current_text}")
+            send_telegram_message(f"новая дата на BYBIT{current_text}",CHAT_ID_UPDATES)
+        return True, "CHANGE"   
+     

@@ -13,7 +13,7 @@ class FeeRateLocators:
         BASE = "https://www.binance.com/en/fee"
 
         SPOT_MAKER_URL = f"{BASE}/spotMaker"
-        SPOT_MAKER_TABLE_XPATH ="//div[@id='bn-tab-pane-0']//table"
+        SPOT_MAKER_TABLE_XPATH ="//div[@id='bn-tab-pane-0']//table" 
 
         ALT_LIQUDITY_BOOST_URL= f"{BASE}/altCoinLiquidityBoost"
         ALT_LIQUDITY_BOOST_TABLE_XPATH = "//div[@id='bn-tab-pane-1']//table"
